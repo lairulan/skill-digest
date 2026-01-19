@@ -36,8 +36,8 @@ TEXT_MODEL = "qwen/qwen-2.5-72b-instruct"
 # 备选模型
 BACKUP_TEXT_MODEL = "google/gemini-2.0-flash-001"
 
-# 图像生成模型 (GPT-5 Image)
-IMAGE_MODEL = "openai/gpt-5-image"
+# 图像生成模型 (Gemini 2.5 Flash Image)
+IMAGE_MODEL = "google/gemini-2.5-flash-image"
 
 
 def log(message: str):
