@@ -35,7 +35,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/skill-creator",
       "category": "Skill Creation",
       "date": "2026-01-19T07:13:50.370258"
+    },
+    {
+      "name": "brand-guidelines",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/brand-guidelines",
+      "category": "Communication",
+      "date": "2026-01-19T07:31:15.444570"
     }
   ],
-  "last_updated": "2026-01-19T07:13:50.370262"
+  "last_updated": "2026-01-19T07:31:15.444574"
 }
