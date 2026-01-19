@@ -1,11 +1,11 @@
 name: 每日 Skill 精选
 
 on:
-  # 定时触发已迁移到 Cloudflare Workers，确保精确执行
-  # 原 schedule: cron: '0 4 * * *' (每天 12:00 北京时间)
-  # 现在通过 Cloudflare Workers Cron Triggers 调用 workflow_dispatch
+  # Cloudflare Workers Cron Trigger 调用
+  repository_dispatch:
+    types: [daily-skill-digest]
 
-  # 支持手动触发和外部调用
+  # 支持手动触发
   workflow_dispatch:
 
 jobs:
