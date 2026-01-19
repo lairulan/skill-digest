@@ -1,0 +1,29 @@
+{
+  "published": [
+    {
+      "name": "slack-gif-creator",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/slack-gif-creator",
+      "category": "Design & Creative",
+      "date": "2026-01-19T08:59:24.427993"
+    },
+    {
+      "name": "docx",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/docx",
+      "category": "Document Skills",
+      "date": "2026-01-19T09:26:06.191442"
+    },
+    {
+      "name": "Skills Explained",
+      "url": "https://claude.com/blog/skills-explained",
+      "category": "📰 Articles & Blog Posts",
+      "date": "2026-01-19T12:00:31.653546"
+    },
+    {
+      "name": "webapp-testing",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/webapp-testing",
+      "category": "Development",
+      "date": "2026-01-19T14:37:56.427979"
+    }
+  ],
+  "last_updated": "2026-01-19T14:37:56.427981"
+}

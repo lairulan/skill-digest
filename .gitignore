@@ -1,0 +1,29 @@
+# Logs
+logs/*.log
+*.log
+
+# Cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Keep data directory structure but ignore cached data for local use
+# Note: published_skills.json is tracked to maintain state across runs
+data/skill_cache.json
+data/selected_skill.json
