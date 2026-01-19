@@ -29,7 +29,13 @@
       "url": "https://github.com/obra/superpowers",
       "category": "Collections & Libraries",
       "date": "2026-01-19T07:07:26.484125"
+    },
+    {
+      "name": "skill-creator",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/skill-creator",
+      "category": "Skill Creation",
+      "date": "2026-01-19T07:13:50.370258"
     }
   ],
-  "last_updated": "2026-01-19T07:07:26.484129"
+  "last_updated": "2026-01-19T07:13:50.370262"
 }
