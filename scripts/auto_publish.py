@@ -6,6 +6,7 @@ Generates article and publishes to WeChat.
 
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -16,46 +17,47 @@ from fetch_skills import fetch_all_skills, log
 from select_daily import select_daily_skill, load_json, SELECTED_FILE
 from generate_article import generate_article, call_openrouter_api, OPENROUTER_API_KEY
 
-# WeChat publish configuration
-SANGENG_API_KEY = os.environ.get("SANGENG_API_KEY", "")
+# WeChat publish configuration (微绿流量宝 API)
+WECHAT_API_KEY = os.environ.get("WECHAT_API_KEY") or os.environ.get("SANGENG_API_KEY", "")
 WECHAT_APPID = "wx5c5f1c55d02d1354"
-WECHAT_API_URL = "https://api.weilvb.com/api/ma/article/publish"
+WECHAT_API_BASE = "https://wx.limyai.com/api/openapi"
 
 
 def publish_to_wechat(title: str, content: str, author: str = "三更AI") -> dict:
-    """Publish article to WeChat Official Account."""
-    import ssl
-    from urllib.request import urlopen, Request
-
-    if not SANGENG_API_KEY:
-        log("SANGENG_API_KEY not set, skipping WeChat publish")
+    """Publish article to WeChat Official Account using curl."""
+    if not WECHAT_API_KEY:
+        log("WECHAT_API_KEY/SANGENG_API_KEY not set, skipping WeChat publish")
         return {"success": False, "error": "API key not set"}
 
-    # Create SSL context
-    ssl_context = ssl.create_default_context()
-    ssl_context.check_hostname = False
-    ssl_context.verify_mode = ssl.CERT_NONE
+    url = f"{WECHAT_API_BASE}/wechat-publish"
 
-    payload = {
-        "appId": WECHAT_APPID,
+    data = {
+        "wechatAppid": WECHAT_APPID,
         "title": title,
         "content": content,
+        "contentFormat": "markdown",
         "author": author
     }
 
+    # Use curl to avoid SSL issues in GitHub Actions
+    cmd = [
+        "curl", "-s", "-X", "POST", url,
+        "-H", f"X-API-Key: {WECHAT_API_KEY}",
+        "-H", "Content-Type: application/json",
+        "-d", json.dumps(data)
+    ]
+
     try:
-        request = Request(
-            WECHAT_API_URL,
-            data=json.dumps(payload).encode("utf-8"),
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {SANGENG_API_KEY}"
-            }
-        )
-        with urlopen(request, timeout=60, context=ssl_context) as response:
-            result = json.loads(response.read().decode("utf-8"))
-            log(f"WeChat publish result: {json.dumps(result, ensure_ascii=False)}")
-            return result
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        response = json.loads(result.stdout)
+        log(f"WeChat publish result: {json.dumps(response, ensure_ascii=False)}")
+        return response
+    except subprocess.TimeoutExpired:
+        log("WeChat publish timeout")
+        return {"success": False, "error": "Request timeout"}
+    except json.JSONDecodeError:
+        log(f"WeChat publish parse error: {result.stdout}")
+        return {"success": False, "error": f"Parse error: {result.stdout}"}
     except Exception as e:
         log(f"WeChat publish error: {e}")
         return {"success": False, "error": str(e)}

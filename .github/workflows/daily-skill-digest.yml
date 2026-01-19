@@ -46,6 +46,7 @@ jobs:
       - name: 生成文章并发布
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           SANGENG_API_KEY: ${{ secrets.SANGENG_API_KEY }}
         run: |
           set -x
