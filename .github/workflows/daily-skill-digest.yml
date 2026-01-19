@@ -1,0 +1,98 @@
+name: 每日 Skill 精选
+
+on:
+  # 定时触发已迁移到 Cloudflare Workers，确保精确执行
+  # 原 schedule: cron: '0 4 * * *' (每天 12:00 北京时间)
+  # 现在通过 Cloudflare Workers Cron Triggers 调用 workflow_dispatch
+
+  # 支持手动触发和外部调用
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install requests
+
+      - name: 获取技能列表
+        run: |
+          cd scripts
+          python3 fetch_skills.py --refresh
+          echo "技能列表已更新"
+
+      - name: 选择今日技能
+        run: |
+          cd scripts
+          python3 select_daily.py
+          echo "今日技能已选择"
+
+      - name: 生成文章并发布
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          SANGENG_API_KEY: ${{ secrets.SANGENG_API_KEY }}
+        run: |
+          set -x
+          cd scripts
+
+          # 检查 API Key
+          if [ -z "$OPENROUTER_API_KEY" ]; then
+            echo "错误：未设置 OPENROUTER_API_KEY"
+            exit 1
+          fi
+
+          # 运行主脚本，带重试机制
+          MAX_RETRIES=3
+          RETRY_COUNT=0
+
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            echo "尝试 $((RETRY_COUNT + 1))/$MAX_RETRIES..."
+
+            if python3 auto_publish.py 2>&1; then
+              echo "✅ Skill 精选发布成功！"
+              exit 0
+            else
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                echo "⚠️ 失败，等待 30 秒后重试..."
+                sleep 30
+              fi
+            fi
+          done
+
+          echo "::error::所有重试都失败了"
+          exit 1
+
+      - name: 标记已发布
+        if: success()
+        run: |
+          cd scripts
+          python3 select_daily.py --mark-published
+          echo "已标记为已发布"
+
+      - name: 提交更新
+        if: success()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/
+          git diff --staged --quiet || git commit -m "chore: 更新已发布技能记录 $(date '+%Y-%m-%d')"
+          git push || echo "No changes to push"
+
+      - name: 记录日志
+        if: always()
+        run: |
+          echo "任务执行时间: $(date)"
+          echo "时区: UTC (北京时间 +8)"
