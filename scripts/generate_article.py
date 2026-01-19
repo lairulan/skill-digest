@@ -116,16 +116,21 @@ def generate_cover_image(skill_name: str, skill_description: str) -> str:
         log("OPENROUTER_API_KEY not set, skipping cover image generation")
         return None
 
-    # Create a prompt for the cover image
-    image_prompt = f"""Generate a modern, minimalist tech illustration for an AI coding tool.
+    # Create a prompt for the cover image - 明确是 Claude Code Skill
+    image_prompt = f"""Generate a professional cover image for "每日Skill精选" - a daily Claude Code Skill recommendation.
 
-Requirements:
-- Clean, professional design with blue and purple gradient background
-- Abstract geometric shapes representing AI, automation, and coding
-- Style: flat design, tech illustration, modern UI aesthetic
-- No text or letters in the image
-- Suitable as a WeChat article cover image (16:9 aspect ratio)
-- High quality, visually appealing"""
+Theme: Claude Code Skill "{skill_name}"
+Description: {skill_description[:100] if skill_description else 'AI coding assistant skill'}
+
+Design requirements:
+- Modern, clean tech illustration style
+- Purple and blue gradient as main colors (Claude's brand colors)
+- Include abstract elements representing: AI assistant, coding, automation, productivity
+- Geometric patterns, code symbols, or circuit-like designs
+- Professional and polished look suitable for WeChat Official Account
+- 16:9 aspect ratio
+- NO text, NO letters, NO words in the image
+- Style: flat design, modern UI, tech illustration"""
 
     payload = {
         "model": IMAGE_MODEL,
@@ -321,16 +326,16 @@ def generate_article_template(skill: dict) -> str:
             "简化复杂任务"
         ]
 
-    article = f"""# 今日发现：{name} - {description[:30] if description else '提升你的AI工作效率'}
+    article = f"""# 每日Skill精选：{name} - {description[:30] if description else '提升你的AI编程效率'}
 
 > 类别：{category}
 > 推荐日期：{datetime.now().strftime('%Y年%m月%d日')}
 
 ## 这是什么？
 
-{name} 是一个专为 Claude Code 设计的技能插件。{description}
+{name} 是一个 Claude Code Skill（技能插件）。{description}
 
-这个技能能够帮助开发者和AI用户更高效地完成日常任务，减少重复工作，提升整体工作体验。
+Claude Code 是 Anthropic 官方推出的 AI 编程助手，而 Skill 是它的扩展插件，可以增强 Claude 的能力，帮助开发者更高效地完成各种任务。
 
 ## 核心能力
 
@@ -382,7 +387,7 @@ def generate_article_template(skill: dict) -> str:
 
 ---
 
-*本文由 Claude Skill Digest 自动生成，每日精选一款优质 Claude 技能推荐给你。*
+*本文由「每日Skill精选」自动生成，每日为你推荐一款优质 Claude Code Skill。*
 """
     return article
 
@@ -395,55 +400,62 @@ def generate_article_with_ai(skill: dict) -> str:
     category = skill.get("category", "通用")
     readme = skill.get("readme", "")
 
-    system_prompt = """你是一位专业的技术评测作者，擅长撰写清晰、有洞察力的技术产品评测文章。
+    system_prompt = """你是「每日Skill精选」栏目的专业编辑，专门撰写 Claude Code Skill 的评测推荐文章。
+
+Claude Code Skill 是什么：
+- Claude Code 是 Anthropic 官方推出的 AI 编程助手 CLI 工具
+- Skill 是 Claude Code 的扩展插件，可以增强 Claude 的能力
+- 用户可以安装各种 Skill 来自动化工作流程、提升效率
+
 你的写作风格：
 - 客观专业，有理有据
 - 语言流畅，通俗易懂
-- 善于发现产品亮点和不足
-- 能够给出实用的建议
+- 善于发现 Skill 的实用价值
+- 能够给出具体的使用建议
 - 文章结构清晰，层次分明"""
 
-    user_prompt = f"""请为以下 Claude Code 技能撰写一篇800-1200字的评测推荐文章。
+    user_prompt = f"""请为以下 Claude Code Skill 撰写一篇800-1200字的「每日Skill精选」推荐文章。
 
-技能信息：
+Skill 信息：
 - 名称：{name}
 - 描述：{description}
 - 类别：{category}
-- 链接：{url}
+- GitHub 链接：{url}
 
 {"README内容：" + readme[:3000] if readme else ""}
 
 请按照以下结构撰写：
 
-1. **标题**：今日发现：[技能名] - [一句话亮点]（标题要吸引人）
+1. **标题**：每日Skill精选：[Skill名称] - [一句话亮点]
 
-2. **简介**（50-80字）：说明这个技能是什么，能做什么，解决什么问题
+2. **简介**（50-80字）：这是一个什么样的 Claude Code Skill，能帮助用户解决什么问题
 
-3. **核心能力**：列出3-4个主要功能点，每个功能点用一句话说明其价值
+3. **核心能力**：列出3-4个主要功能点，说明这个 Skill 能做什么
 
-4. **使用场景**（150-200字）：描述2-3个具体的、贴近实际工作的使用场景
+4. **使用场景**（150-200字）：描述2-3个具体的使用场景，让读者明白什么时候需要用这个 Skill
 
-5. **快速上手**（100-150字）：简单的安装和使用步骤，让读者能快速尝试
+5. **快速上手**（100-150字）：
+   - 如何安装这个 Skill（通常是克隆到 ~/.claude/skills/ 目录）
+   - 如何在 Claude Code 中使用
 
 6. **优缺点评估**：
-   - 优点：3-4点（基于实际功能分析）
-   - 不足：1-2点（客观真实，不要敷衍）
+   - 优点：3-4点（基于实际功能）
+   - 不足：1-2点（客观真实）
 
-7. **推荐指数**：给出1-5星评分（用⭐表示）和一句话总结
+7. **推荐指数**：⭐评分（1-5星）和一句话总结
 
-8. **获取方式**：GitHub链接和安装命令
+8. **获取方式**：GitHub 链接
 
 写作要求：
-- 保持客观专业的语气，不要过度吹捧
-- 基于README内容进行分析，确保准确性
-- 使用中文撰写，语言自然流畅
-- 适当使用 Markdown 格式增强可读性
-- 文章要有实际价值，能帮助读者判断是否适合自己"""
+- 始终强调这是 Claude Code Skill，不是普通的软件工具
+- 保持客观专业，不过度吹捧
+- 使用中文撰写
+- 适当使用 Markdown 格式"""
 
     content = call_openrouter_api(user_prompt, system_prompt)
     if content:
         # Add footer
-        content += f"\n\n---\n\n*本文由 Claude Skill Digest 自动生成，每日精选一款优质 Claude 技能推荐给你。*"
+        content += f"\n\n---\n\n*本文由「每日Skill精选」自动生成，每日为你推荐一款优质 Claude Code Skill。*"
         return content
     return None
 

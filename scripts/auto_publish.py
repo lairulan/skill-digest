@@ -98,7 +98,7 @@ def main():
 
     # Step 3: Publish to WeChat
     log("Step 3: Publishing to WeChat...")
-    title = f"每日技能精选：{skill_name}"
+    title = f"每日Skill精选：{skill_name}"
 
     result = publish_to_wechat(title, article)
 

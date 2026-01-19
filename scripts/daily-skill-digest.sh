@@ -110,7 +110,7 @@ if [ -d "$WECHAT_PUBLISH_DIR" ]; then
             # Run publish script with correct subcommand format
             python3 "$PUBLISH_SCRIPT" publish \
                 --appid "$WECHAT_APPID" \
-                --title "每日技能精选：$SKILL_NAME" \
+                --title "每日Skill精选：$SKILL_NAME" \
                 --content-file "$ARTICLE_FILE" \
                 --author "三更AI" \
                 2>&1 | tee -a "$LOG_FILE" || {
