@@ -41,7 +41,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/brand-guidelines",
       "category": "Communication",
       "date": "2026-01-19T07:31:15.444570"
+    },
+    {
+      "name": "Skills API Endpoint",
+      "url": "https://platform.claude.com/docs/en/api/beta/skills",
+      "category": "Documentation",
+      "date": "2026-01-20T04:01:26.768982"
     }
   ],
-  "last_updated": "2026-01-19T07:31:15.444574"
+  "last_updated": "2026-01-20T04:01:26.768986"
 }
