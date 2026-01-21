@@ -47,7 +47,13 @@
       "url": "https://platform.claude.com/docs/en/api/beta/skills",
       "category": "Documentation",
       "date": "2026-01-20T04:01:26.768982"
+    },
+    {
+      "name": "Using Skills in Claude",
+      "url": "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
+      "category": "Getting Started",
+      "date": "2026-01-21T04:02:44.876107"
     }
   ],
-  "last_updated": "2026-01-20T04:01:26.768986"
+  "last_updated": "2026-01-21T04:02:44.876111"
 }
