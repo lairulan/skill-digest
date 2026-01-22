@@ -19,11 +19,44 @@ from generate_article import generate_article, call_openrouter_api, OPENROUTER_A
 
 # WeChat publish configuration (微绿流量宝 API)
 WECHAT_API_KEY = os.environ.get("WECHAT_API_KEY") or os.environ.get("SANGENG_API_KEY", "")
-WECHAT_APPID = "wx5c5f1c55d02d1354"
+WECHAT_APPID = "wx5c5f1c55d02d1354"  # 三更AI
 WECHAT_API_BASE = "https://wx.limyai.com/api/openapi"
 
 
-def publish_to_wechat(title: str, content: str, author: str = "三更AI") -> dict:
+def upload_to_imgbb(image_path: str) -> str:
+    """Upload image to imgbb and return URL."""
+    imgbb_api_key = os.environ.get("IMGBB_API_KEY", "")
+    if not imgbb_api_key:
+        log("IMGBB_API_KEY not set, skipping image upload")
+        return None
+
+    try:
+        import base64
+        with open(image_path, "rb") as f:
+            image_data = base64.b64encode(f.read()).decode("utf-8")
+
+        cmd = [
+            "curl", "-s", "-X", "POST",
+            f"https://api.imgbb.com/1/upload?key={imgbb_api_key}",
+            "-F", f"image={image_data}"
+        ]
+
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        response = json.loads(result.stdout)
+
+        if response.get("success"):
+            url = response.get("data", {}).get("url", "")
+            log(f"Image uploaded to imgbb: {url}")
+            return url
+        else:
+            log(f"imgbb upload failed: {response}")
+            return None
+    except Exception as e:
+        log(f"Image upload error: {e}")
+        return None
+
+
+def publish_to_wechat(title: str, content: str, author: str = "三更AI", cover_image: str = None) -> dict:
     """Publish article to WeChat Official Account using curl."""
     if not WECHAT_API_KEY:
         log("WECHAT_API_KEY/SANGENG_API_KEY not set, skipping WeChat publish")
@@ -38,6 +71,11 @@ def publish_to_wechat(title: str, content: str, author: str = "三更AI") -> dic
         "contentFormat": "markdown",
         "author": author
     }
+
+    # Add cover image if provided
+    if cover_image:
+        data["coverImage"] = cover_image
+        log(f"Using cover image: {cover_image}")
 
     # Use curl to avoid SSL issues in GitHub Actions
     cmd = [
@@ -95,14 +133,23 @@ def main():
         return 1
 
     log(f"Article generated: {len(article)} characters")
+
+    # Upload cover image to imgbb if available
+    cover_url = None
     if cover_path:
-        log(f"Cover image: {cover_path}")
+        log(f"Cover image generated: {cover_path}")
+        log("Uploading cover image to imgbb...")
+        cover_url = upload_to_imgbb(cover_path)
+        if cover_url:
+            log(f"Cover image uploaded: {cover_url}")
+        else:
+            log("Warning: Failed to upload cover image, publishing without cover")
 
     # Step 3: Publish to WeChat
     log("Step 3: Publishing to WeChat...")
     title = f"每日Skill精选：{skill_name}"
 
-    result = publish_to_wechat(title, article)
+    result = publish_to_wechat(title, article, cover_image=cover_url)
 
     if result.get("success"):
         log("✅ Successfully published to WeChat!")

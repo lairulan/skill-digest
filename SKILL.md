@@ -15,6 +15,15 @@ triggers:
 
 自动化工作流，每天从 Claude Skill 聚合网站精选 1 条优质技能，生成 800-1200 字的评测推荐型文章，并推送到「三更AI」公众号。
 
+## 公众号配置
+
+| 项目 | 值 |
+|------|-----|
+| 公众号 | 三更AI |
+| AppID | `wx5c5f1c55d02d1354` |
+| API Key | 环境变量 `WECHAT_API_KEY` 或 `SANGENG_API_KEY` |
+| 定时触发 | 每天 12:00 |
+
 ## 数据源
 
 - GitHub Awesome Claude Skills: `https://github.com/travisvn/awesome-claude-skills`
