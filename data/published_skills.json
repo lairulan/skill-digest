@@ -59,7 +59,13 @@
       "url": "https://skywork.ai/blog/how-to-use-skills-in-claude-code-install-path-project-scoping-testing/",
       "category": "Written Tutorials",
       "date": "2026-01-22T04:02:02.750099"
+    },
+    {
+      "name": "anthropics/skills",
+      "url": "https://github.com/anthropics/skills",
+      "category": "Repositories & Examples",
+      "date": "2026-01-23T04:01:40.440999"
     }
   ],
-  "last_updated": "2026-01-22T04:02:02.750103"
+  "last_updated": "2026-01-23T04:01:40.441003"
 }
