@@ -46,7 +46,13 @@ def log(message: str):
 def fetch_url(url: str, headers: dict = None) -> str:
     """Fetch URL content with error handling."""
     try:
-        req_headers = {"User-Agent": "Claude-Skill-Digest/1.0"}
+        req_headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,application/json,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
+            "Accept-Encoding": "identity",
+            "Connection": "keep-alive",
+        }
         if headers:
             req_headers.update(headers)
         request = Request(url, headers=req_headers)
@@ -66,46 +72,64 @@ def fetch_url(url: str, headers: dict = None) -> str:
 def parse_awesome_list(content: str) -> list:
     """Parse the awesome-claude-skills README.md to extract skills."""
     skills = []
-
-    # Pattern to match skill entries like:
-    # - [Skill Name](url) - Description
-    # or
-    # - **[Skill Name](url)** - Description
-    pattern = r'-\s+\*?\*?\[([^\]]+)\]\(([^)]+)\)\*?\*?\s*[-–:]\s*(.+?)(?=\n|$)'
-
-    matches = re.findall(pattern, content)
-
     current_category = "General"
 
-    # Also try to detect categories from headers
+    # 跳过的链接类型
+    skip_patterns = ['badge', 'shield', 'twitter', 'linkedin', 'discord',
+                     'buymeacoffee', 'ko-fi', 'sponsor', 'paypal', 'patreon']
+
     lines = content.split('\n')
-    for i, line in enumerate(lines):
-        # Match headers like ## Category or ### Category
-        header_match = re.match(r'^#{2,3}\s+(.+)$', line)
+    for line in lines:
+        # 匹配标题（## 或 ###）来确定分类
+        header_match = re.match(r'^#{2,4}\s+(.+)$', line)
         if header_match:
             current_category = header_match.group(1).strip()
+            # 移除 emoji 前缀
+            current_category = re.sub(r'^[\U0001F300-\U0001F9FF\s]+', '', current_category).strip()
             continue
 
-        # Match skill entries
-        skill_match = re.match(r'-\s+\*?\*?\[([^\]]+)\]\(([^)]+)\)\*?\*?\s*[-–:]?\s*(.+)?', line)
-        if skill_match:
-            name = skill_match.group(1).strip()
-            url = skill_match.group(2).strip()
-            description = skill_match.group(3).strip() if skill_match.group(3) else ""
+        # 支持多种列表格式：-, *, •, 数字列表
+        # 支持可选的粗体 ** 包裹
+        # 支持多种分隔符：-, –, :, 或直接空格
+        skill_patterns = [
+            # 格式1: - [Name](url) - Description
+            r'^[-*•]\s+\*?\*?\[([^\]]+)\]\(([^)]+)\)\*?\*?\s*[-–:]?\s*(.*)$',
+            # 格式2: - **[Name](url)**: Description
+            r'^[-*•]\s+\*\*\[([^\]]+)\]\(([^)]+)\)\*\*:?\s*(.*)$',
+            # 格式3: 1. [Name](url) - Description (数字列表)
+            r'^\d+\.\s+\*?\*?\[([^\]]+)\]\(([^)]+)\)\*?\*?\s*[-–:]?\s*(.*)$',
+            # 格式4: [Name](url) (无列表符号但在列表上下文中)
+            r'^\s{2,}[-*]\s+\[([^\]]+)\]\(([^)]+)\)\s*[-–:]?\s*(.*)$',
+        ]
 
-            # Skip non-skill links (like badges, social links)
-            if any(skip in url.lower() for skip in ['badge', 'shield', 'twitter', 'linkedin', 'discord']):
-                continue
+        for pattern in skill_patterns:
+            skill_match = re.match(pattern, line)
+            if skill_match:
+                name = skill_match.group(1).strip()
+                url = skill_match.group(2).strip()
+                description = skill_match.group(3).strip() if skill_match.group(3) else ""
 
-            skill = {
-                "name": name,
-                "url": url,
-                "description": description,
-                "category": current_category,
-                "source": "github-awesome",
-                "fetched_at": datetime.now().isoformat()
-            }
-            skills.append(skill)
+                # 跳过非技能链接
+                if any(skip in url.lower() for skip in skip_patterns):
+                    break
+
+                # 跳过锚点链接（目录）
+                if url.startswith('#'):
+                    break
+
+                # 清理描述中的尾随标点和空白
+                description = description.rstrip('.,;:')
+
+                skill = {
+                    "name": name,
+                    "url": url,
+                    "description": description,
+                    "category": current_category,
+                    "source": "github-awesome",
+                    "fetched_at": datetime.now().isoformat()
+                }
+                skills.append(skill)
+                break  # 匹配到一个格式就停止
 
     return skills
 
@@ -124,19 +148,162 @@ def fetch_from_github() -> list:
 
 
 def fetch_from_skillsmp() -> list:
-    """Fetch skills from skillsmp.com (placeholder for future implementation)."""
-    # This would require more complex scraping or API access
-    # For now, return empty list
-    log("SkillsMP scraping not implemented yet")
-    return []
+    """Fetch skills from skillsmp.com API."""
+    log("Fetching from SkillsMP...")
+
+    # SkillsMP 提供 JSON API
+    api_url = "https://skillsmp.com/api/skills"
+
+    try:
+        content = fetch_url(api_url)
+        if not content:
+            # 尝试备用 URL
+            backup_url = "https://skillsmp.com/skills.json"
+            content = fetch_url(backup_url)
+
+        if not content:
+            log("Could not fetch from SkillsMP API")
+            return []
+
+        data = json.loads(content)
+        skills = []
+
+        # 根据 API 响应格式解析
+        items = data if isinstance(data, list) else data.get("skills", data.get("data", []))
+
+        for item in items:
+            if isinstance(item, dict):
+                skill = {
+                    "name": item.get("name", item.get("title", "")),
+                    "url": item.get("url", item.get("github_url", item.get("link", ""))),
+                    "description": item.get("description", item.get("summary", "")),
+                    "category": item.get("category", item.get("tags", ["General"])[0] if item.get("tags") else "General"),
+                    "source": "skillsmp",
+                    "fetched_at": datetime.now().isoformat()
+                }
+                if skill["name"] and skill["url"]:
+                    skills.append(skill)
+
+        log(f"Found {len(skills)} skills from SkillsMP")
+        return skills
+
+    except json.JSONDecodeError:
+        log("SkillsMP returned non-JSON response, trying HTML scraping...")
+        return _scrape_skillsmp_html()
+    except Exception as e:
+        log(f"SkillsMP fetch error: {e}")
+        return []
+
+
+def _scrape_skillsmp_html() -> list:
+    """Scrape SkillsMP website HTML as fallback."""
+    url = "https://skillsmp.com"
+    content = fetch_url(url)
+    if not content:
+        return []
+
+    skills = []
+
+    # 尝试提取技能卡片
+    # 常见的 HTML 结构模式
+    patterns = [
+        # 模式1: <a href="url"><h3>Name</h3></a><p>Description</p>
+        r'<a[^>]*href=["\']([^"\']+)["\'][^>]*>\s*<h[23][^>]*>([^<]+)</h[23]>\s*</a>\s*<p[^>]*>([^<]+)</p>',
+        # 模式2: data-skill 属性
+        r'data-skill=["\']([^"\']+)["\'][^>]*>.*?<a[^>]*href=["\']([^"\']+)["\']',
+    ]
+
+    for pattern in patterns:
+        matches = re.findall(pattern, content, re.DOTALL | re.IGNORECASE)
+        for match in matches:
+            if len(match) >= 2:
+                skill = {
+                    "name": match[1] if len(match) > 1 else match[0],
+                    "url": match[0] if match[0].startswith('http') else f"https://skillsmp.com{match[0]}",
+                    "description": match[2] if len(match) > 2 else "",
+                    "category": "General",
+                    "source": "skillsmp",
+                    "fetched_at": datetime.now().isoformat()
+                }
+                if skill["name"] and skill["url"]:
+                    skills.append(skill)
+
+    log(f"Scraped {len(skills)} skills from SkillsMP HTML")
+    return skills
 
 
 def fetch_from_oneskill() -> list:
-    """Fetch skills from oneskill.dev (placeholder for future implementation)."""
-    # This would require more complex scraping or API access
-    # For now, return empty list
-    log("OneSkill scraping not implemented yet")
-    return []
+    """Fetch skills from oneskill.dev."""
+    log("Fetching from OneSkill...")
+
+    # 尝试 API
+    api_url = "https://oneskill.dev/api/skills"
+
+    try:
+        content = fetch_url(api_url)
+        if content:
+            data = json.loads(content)
+            skills = []
+
+            items = data if isinstance(data, list) else data.get("skills", data.get("data", []))
+
+            for item in items:
+                if isinstance(item, dict):
+                    skill = {
+                        "name": item.get("name", item.get("title", "")),
+                        "url": item.get("url", item.get("github_url", item.get("link", ""))),
+                        "description": item.get("description", item.get("summary", "")),
+                        "category": item.get("category", "General"),
+                        "source": "oneskill",
+                        "fetched_at": datetime.now().isoformat()
+                    }
+                    if skill["name"] and skill["url"]:
+                        skills.append(skill)
+
+            log(f"Found {len(skills)} skills from OneSkill API")
+            return skills
+
+    except json.JSONDecodeError:
+        pass
+    except Exception as e:
+        log(f"OneSkill API error: {e}")
+
+    # 备用：抓取 HTML
+    return _scrape_oneskill_html()
+
+
+def _scrape_oneskill_html() -> list:
+    """Scrape OneSkill website HTML as fallback."""
+    url = "https://oneskill.dev"
+    content = fetch_url(url)
+    if not content:
+        return []
+
+    skills = []
+
+    # 尝试提取技能列表
+    patterns = [
+        r'<a[^>]*href=["\']([^"\']+github[^"\']+)["\'][^>]*>\s*<[^>]*>([^<]+)<',
+        r'class=["\']skill[^"\']*["\'][^>]*>\s*<a[^>]*href=["\']([^"\']+)["\'][^>]*>([^<]+)</a>',
+    ]
+
+    for pattern in patterns:
+        matches = re.findall(pattern, content, re.DOTALL | re.IGNORECASE)
+        for match in matches:
+            if len(match) >= 2:
+                skill = {
+                    "name": match[1].strip(),
+                    "url": match[0] if match[0].startswith('http') else f"https://oneskill.dev{match[0]}",
+                    "description": "",
+                    "category": "General",
+                    "source": "oneskill",
+                    "fetched_at": datetime.now().isoformat()
+                }
+                if skill["name"] and 'github' in skill["url"].lower():
+                    skills.append(skill)
+
+    log(f"Scraped {len(skills)} skills from OneSkill HTML")
+    return skills
 
 
 def load_cache() -> dict:

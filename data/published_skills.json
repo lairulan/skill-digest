@@ -37,41 +37,23 @@
       "date": "2026-01-19T07:13:50.370258"
     },
     {
-      "name": "brand-guidelines",
-      "url": "https://github.com/anthropics/skills/tree/main/skills/brand-guidelines",
+      "name": "internal-comms",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/internal-comms",
       "category": "Communication",
-      "date": "2026-01-19T07:31:15.444570"
+      "date": "2026-01-20T12:31:24.603573"
     },
     {
-      "name": "Skills API Endpoint",
-      "url": "https://platform.claude.com/docs/en/api/beta/skills",
+      "name": "Claude Skills Announcement",
+      "url": "https://www.anthropic.com/news/skills",
       "category": "Documentation",
-      "date": "2026-01-20T04:01:26.768982"
-    },
-    {
-      "name": "Using Skills in Claude",
-      "url": "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
-      "category": "Getting Started",
-      "date": "2026-01-21T04:02:44.876107"
-    },
-    {
-      "name": "How to Use Skills in Claude Code",
-      "url": "https://skywork.ai/blog/how-to-use-skills-in-claude-code-install-path-project-scoping-testing/",
-      "category": "Written Tutorials",
-      "date": "2026-01-22T04:02:02.750099"
-    },
-    {
-      "name": "anthropics/skills",
-      "url": "https://github.com/anthropics/skills",
-      "category": "Repositories & Examples",
-      "date": "2026-01-23T04:01:40.440999"
+      "date": "2026-01-21T12:00:50.210614"
     },
     {
       "name": "yusufkaraaslan/Skill_Seekers",
       "url": "https://github.com/yusufkaraaslan/Skill_Seekers",
       "category": "Tools",
-      "date": "2026-01-24T04:01:39.405645"
+      "date": "2026-01-22T12:00:48.380734"
     }
   ],
-  "last_updated": "2026-01-24T04:01:39.405649"
+  "last_updated": "2026-01-22T12:00:48.380736"
 }

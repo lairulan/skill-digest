@@ -38,6 +38,13 @@ BACKUP_TEXT_MODEL = "google/gemini-2.0-flash-001"
 
 # 图像生成模型 (Gemini 2.5 Flash Image)
 IMAGE_MODEL = "google/gemini-2.5-flash-image"
+# 备用图像模型
+BACKUP_IMAGE_MODEL = "openai/gpt-4o"
+
+# 豆包图像 API 配置
+DOUBAO_IMAGE_API_URL = "https://ark.cn-beijing.volces.com/api/v3/images/generations"
+DOUBAO_IMAGE_MODEL = "doubao-seedream-4-5-251128"
+DOUBAO_API_KEY = os.environ.get("DOUBAO_API_KEY", "")
 
 
 def log(message: str):
@@ -111,12 +118,8 @@ def call_openrouter_api(prompt: str, system_prompt: str = None, model: str = Non
 
 
 def generate_cover_image(skill_name: str, skill_description: str) -> str:
-    """Generate a cover image using OpenRouter's GPT-5 Image model."""
-    if not OPENROUTER_API_KEY:
-        log("OPENROUTER_API_KEY not set, skipping cover image generation")
-        return None
-
-    # Create a prompt for the cover image - 明确是 Claude Code Skill
+    """Generate a cover image using OpenRouter or Doubao as fallback."""
+    # 构建图片生成提示词
     image_prompt = f"""Generate a professional cover image for "每日Skill精选" - a daily Claude Code Skill recommendation.
 
 Theme: Claude Code Skill "{skill_name}"
@@ -132,14 +135,28 @@ Design requirements:
 - NO text, NO letters, NO words in the image
 - Style: flat design, modern UI, tech illustration"""
 
+    # 尝试 OpenRouter
+    if OPENROUTER_API_KEY:
+        result = _generate_image_openrouter(image_prompt, skill_name)
+        if result:
+            return result
+        log("OpenRouter image generation failed, trying Doubao...")
+
+    # 备用：豆包 API
+    if DOUBAO_API_KEY:
+        result = _generate_image_doubao(image_prompt, skill_name)
+        if result:
+            return result
+
+    log("All image generation methods failed")
+    return None
+
+
+def _generate_image_openrouter(prompt: str, skill_name: str) -> str:
+    """使用 OpenRouter 生成图片"""
     payload = {
         "model": IMAGE_MODEL,
-        "messages": [
-            {
-                "role": "user",
-                "content": image_prompt
-            }
-        ]
+        "messages": [{"role": "user", "content": prompt}]
     }
 
     try:
@@ -156,38 +173,118 @@ Design requirements:
         )
         with urlopen(request, timeout=180, context=SSL_CONTEXT) as response:
             result = json.loads(response.read().decode("utf-8"))
+            image_url = _extract_image_from_response(result)
+            if image_url:
+                log(f"Generated cover image via {IMAGE_MODEL}")
+                return save_cover_image_from_base64(image_url, skill_name)
 
-            # Extract image from response
-            choices = result.get("choices", [])
-            if choices:
-                message = choices[0].get("message", {})
-
-                # GPT-5 Image returns images in the "images" field
-                images = message.get("images", [])
-                if images:
-                    for img in images:
-                        if img.get("type") == "image_url":
-                            image_url = img.get("image_url", {}).get("url", "")
-                            if image_url:
-                                log(f"Generated cover image via {IMAGE_MODEL}")
-                                return save_cover_image_from_base64(image_url, skill_name)
-
-                # Fallback: check content array
-                content = message.get("content", [])
-                if isinstance(content, list):
-                    for item in content:
-                        if isinstance(item, dict) and item.get("type") == "image_url":
-                            image_url = item.get("image_url", {}).get("url", "")
-                            if image_url:
-                                log(f"Generated cover image via {IMAGE_MODEL}")
-                                return save_cover_image_from_base64(image_url, skill_name)
-
-            log(f"No image found in response")
-            return None
+        log("No image found in OpenRouter response")
+        return None
 
     except Exception as e:
-        log(f"Image generation error: {e}")
+        log(f"OpenRouter image generation error: {e}")
         return None
+
+
+def _generate_image_doubao(prompt: str, skill_name: str) -> str:
+    """使用豆包 API 生成图片"""
+    import subprocess
+
+    data = {
+        "model": DOUBAO_IMAGE_MODEL,
+        "prompt": prompt,
+        "response_format": "url",
+        "size": "1024x1024",
+        "guidance_scale": 3,
+        "watermark": False
+    }
+
+    try:
+        log(f"Generating cover image with Doubao {DOUBAO_IMAGE_MODEL}...")
+        cmd = [
+            "curl", "-s", "-X", "POST", DOUBAO_IMAGE_API_URL,
+            "-H", f"Authorization: Bearer {DOUBAO_API_KEY}",
+            "-H", "Content-Type: application/json",
+            "-d", json.dumps(data, ensure_ascii=False)
+        ]
+
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        response = json.loads(result.stdout)
+
+        if "error" in response:
+            log(f"Doubao API error: {response['error']}")
+            return None
+
+        if "data" in response and len(response["data"]) > 0:
+            image_url = response["data"][0].get("url")
+            if image_url:
+                log(f"Generated cover image via Doubao")
+                return save_cover_image(image_url, skill_name)
+
+        log("No image in Doubao response")
+        return None
+
+    except Exception as e:
+        log(f"Doubao image generation error: {e}")
+        return None
+
+
+def _extract_image_from_response(result: dict) -> str:
+    """从 OpenRouter 响应中提取图片 URL（支持多种格式）"""
+    choices = result.get("choices", [])
+    if not choices:
+        return None
+
+    message = choices[0].get("message", {})
+
+    # 格式1: images 数组（Gemini 2.5 Flash Image 常见格式）
+    images = message.get("images", [])
+    if images:
+        for img in images:
+            # 直接是 URL 字符串
+            if isinstance(img, str):
+                return img
+            # type=image_url 格式
+            if isinstance(img, dict):
+                if img.get("type") == "image_url":
+                    url_obj = img.get("image_url", {})
+                    if isinstance(url_obj, dict):
+                        url = url_obj.get("url", "")
+                    else:
+                        url = str(url_obj)
+                    if url:
+                        return url
+                # 直接有 url 字段
+                if img.get("url"):
+                    return img.get("url")
+                # base64 格式
+                if img.get("b64_json"):
+                    return f"data:image/png;base64,{img.get('b64_json')}"
+
+    # 格式2: content 数组（GPT-4o/DALL-E 格式）
+    content = message.get("content", [])
+    if isinstance(content, list):
+        for item in content:
+            if isinstance(item, dict):
+                if item.get("type") == "image_url":
+                    url_obj = item.get("image_url", {})
+                    if isinstance(url_obj, dict):
+                        url = url_obj.get("url", "")
+                    else:
+                        url = str(url_obj)
+                    if url:
+                        return url
+                if item.get("type") == "image" and item.get("source"):
+                    source = item.get("source", {})
+                    if source.get("type") == "base64":
+                        media_type = source.get("media_type", "image/png")
+                        return f"data:{media_type};base64,{source.get('data', '')}"
+
+    # 格式3: 直接在 content 字符串中包含 data URL
+    if isinstance(content, str) and content.startswith("data:image"):
+        return content
+
+    return None
 
 
 def save_cover_image_from_base64(data_url: str, skill_name: str) -> str:
