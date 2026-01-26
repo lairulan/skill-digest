@@ -59,7 +59,13 @@
       "url": "https://github.com/anthropics/skills",
       "category": "Repositories & Examples",
       "date": "2026-01-25T04:01:44.203522"
+    },
+    {
+      "name": "How to Use Skills in Claude Code",
+      "url": "https://skywork.ai/blog/how-to-use-skills-in-claude-code-install-path-project-scoping-testing/",
+      "category": "Written Tutorials",
+      "date": "2026-01-26T04:01:37.117597"
     }
   ],
-  "last_updated": "2026-01-25T04:01:44.203526"
+  "last_updated": "2026-01-26T04:01:37.117601"
 }
