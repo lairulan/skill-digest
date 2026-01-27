@@ -90,8 +90,38 @@ def score_skill(skill: dict, published_urls: set, recent_categories: list) -> fl
     if skill.get("url") in published_urls:
         return -1
 
-    # Penalize recently used categories (variety)
+    # 优先选择真正的 GitHub skill
+    url = skill.get("url", "")
     category = skill.get("category", "")
+
+    # 排除非 skill 分类
+    skip_categories = [
+        'Written Tutorials', 'Video Tutorials', 'Documentation',
+        'Articles & Blog Posts', 'Getting Help', 'Community',
+        'Resources', 'Learning Resources', 'Guides'
+    ]
+
+    if any(skip_cat.lower() in category.lower() for skip_cat in skip_categories):
+        return -1
+
+    # 排除非 GitHub 链接
+    if 'github.com' not in url:
+        return -1
+
+    # 排除教程、文档等链接
+    skip_patterns = ['/issues', '/discussions', 'support.', 'docs.', 'blog.', '.ai/blog']
+    if any(pattern in url.lower() for pattern in skip_patterns):
+        return -1
+
+    # 优先选择 Anthropic 官方 skills
+    if 'anthropics/skills' in url:
+        score += 30
+
+    # 优先选择包含 /skills/ 路径的链接
+    if '/skills/' in url or '/SKILL.md' in url:
+        score += 20
+
+    # Penalize recently used categories (variety)
     category_count = recent_categories.count(category)
     score -= category_count * 20
 

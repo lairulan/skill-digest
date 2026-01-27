@@ -61,17 +61,35 @@
       "date": "2026-01-25T04:01:44.203522"
     },
     {
+      "name": "Claude Cookbooks - Skills",
+      "url": "https://github.com/anthropics/claude-cookbooks/tree/main/skills",
+      "category": "Repositories & Examples",
+      "date": "2026-01-25T12:00:43.338893"
+    },
+    {
       "name": "How to Use Skills in Claude Code",
       "url": "https://skywork.ai/blog/how-to-use-skills-in-claude-code-install-path-project-scoping-testing/",
       "category": "Written Tutorials",
       "date": "2026-01-26T04:01:37.117597"
     },
     {
+      "name": "xlsx",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/xlsx",
+      "category": "Document Skills",
+      "date": "2026-01-26T12:00:45.379133"
+    },
+    {
       "name": "pptx",
       "url": "https://github.com/anthropics/skills/tree/main/skills/pptx",
       "category": "Document Skills",
       "date": "2026-01-27T04:01:24.620740"
+    },
+    {
+      "name": "canvas-design",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/canvas-design",
+      "category": "Design & Creative",
+      "date": "2026-01-27T12:00:39.921494"
     }
   ],
-  "last_updated": "2026-01-27T04:01:24.620744"
+  "last_updated": "2026-01-27T12:00:39.921502"
 }

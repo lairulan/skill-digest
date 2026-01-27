@@ -1,0 +1,285 @@
+{
+  "skills": [
+    {
+      "name": "docx",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/docx",
+      "description": "Create, edit, and analyze Word documents with support for tracked changes, comments, formatting preservation, and text extraction",
+      "category": "Document Skills",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160528"
+    },
+    {
+      "name": "pdf",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/pdf",
+      "description": "Comprehensive PDF manipulation toolkit for extracting text and tables, creating new PDFs, merging/splitting documents, and handling forms",
+      "category": "Document Skills",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160546"
+    },
+    {
+      "name": "pptx",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/pptx",
+      "description": "Create, edit, and analyze PowerPoint presentations with support for layouts, templates, charts, and automated slide generation",
+      "category": "Document Skills",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160552"
+    },
+    {
+      "name": "xlsx",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/xlsx",
+      "description": "Create, edit, and analyze Excel spreadsheets with support for formulas, formatting, data analysis, and visualization",
+      "category": "Document Skills",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160557"
+    },
+    {
+      "name": "algorithmic-art",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/algorithmic-art",
+      "description": "Create generative art using p5.js with seeded randomness, flow fields, and particle systems",
+      "category": "Design & Creative",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160565"
+    },
+    {
+      "name": "canvas-design",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/canvas-design",
+      "description": "Design beautiful visual art in .png and .pdf formats using design philosophies",
+      "category": "Design & Creative",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160570"
+    },
+    {
+      "name": "slack-gif-creator",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/slack-gif-creator",
+      "description": "Create animated GIFs optimized for Slack's size constraints",
+      "category": "Design & Creative",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160574"
+    },
+    {
+      "name": "frontend-design",
+      "url": "https://github.com/anthropics/skills/blob/main/skills/frontend-design",
+      "description": "Instructs Claude to avoid \"AI slop\" or generic aesthetics and to make bold design decisions. Works very well for React & Tailwind.",
+      "category": "Development",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160582"
+    },
+    {
+      "name": "artifacts-builder",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/artifacts-builder",
+      "description": "Build complex claude.ai HTML artifacts using React, Tailwind CSS, and shadcn/ui components",
+      "category": "Development",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160586"
+    },
+    {
+      "name": "mcp-builder",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/mcp-builder",
+      "description": "Guide for creating high-quality MCP servers to integrate external APIs and services",
+      "category": "Development",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160591"
+    },
+    {
+      "name": "webapp-testing",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/webapp-testing",
+      "description": "Test local web applications using Playwright for UI verification and debugging",
+      "category": "Development",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160595"
+    },
+    {
+      "name": "brand-guidelines",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/brand-guidelines",
+      "description": "Apply Anthropic's official brand colors and typography to artifacts",
+      "category": "Communication",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160604"
+    },
+    {
+      "name": "internal-comms",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/internal-comms",
+      "description": "Write internal communications like status reports, newsletters, and FAQs",
+      "category": "Communication",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160612"
+    },
+    {
+      "name": "skill-creator",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/skill-creator",
+      "description": "Interactive skill creation tool that guides you through building new skills with Q&A",
+      "category": "Skill Creation",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160620"
+    },
+    {
+      "name": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "description": "Core skills library for Claude Code with 20+ battle-tested skills including TDD, debugging, and collaboration patterns",
+      "category": "Collections & Libraries",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160634"
+    },
+    {
+      "name": "obra/superpowers-lab",
+      "url": "https://github.com/obra/superpowers-lab",
+      "description": "Experimental skills for `Claude Code Superpowers` (see above)",
+      "category": "Collections & Libraries",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160643"
+    },
+    {
+      "name": "yusufkaraaslan/Skill_Seekers",
+      "url": "https://github.com/yusufkaraaslan/Skill_Seekers",
+      "description": "Convert documentation websites into Claude Skills",
+      "category": "Tools",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160669"
+    },
+    {
+      "name": "What are Skills?",
+      "url": "https://support.claude.com/en/articles/12512176-what-are-skills",
+      "description": "Official support article explaining Claude Skills",
+      "category": "Getting Started",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160759"
+    },
+    {
+      "name": "Using Skills in Claude",
+      "url": "https://support.claude.com/en/articles/12512180-using-skills-in-claude",
+      "description": "How to enable and use skills",
+      "category": "Getting Started",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160767"
+    },
+    {
+      "name": "Claude Skills Announcement",
+      "url": "https://www.anthropic.com/news/skills",
+      "description": "Official announcement from Anthropic",
+      "category": "Documentation",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160775"
+    },
+    {
+      "name": "Equipping Agents with Skills",
+      "url": "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills",
+      "description": "Engineering deep dive on Agent Skills",
+      "category": "Documentation",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160783"
+    },
+    {
+      "name": "Claude Developer Platform",
+      "url": "https://docs.claude.com/",
+      "description": "Official documentation",
+      "category": "Documentation",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160788"
+    },
+    {
+      "name": "Skills API Endpoint",
+      "url": "https://platform.claude.com/docs/en/api/beta/skills",
+      "description": "`/v1/skills` API documentation",
+      "category": "Documentation",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160793"
+    },
+    {
+      "name": "anthropics/skills",
+      "url": "https://github.com/anthropics/skills",
+      "description": "Official public repository for Skills",
+      "category": "Repositories & Examples",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160800"
+    },
+    {
+      "name": "Claude Cookbooks - Skills",
+      "url": "https://github.com/anthropics/claude-cookbooks/tree/main/skills",
+      "description": "Example notebooks and tutorials",
+      "category": "Repositories & Examples",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160804"
+    },
+    {
+      "name": "How to Create Your First Claude Skill",
+      "url": "https://skywork.ai/blog/ai-agent/how-to-create-claude-skill-step-by-step-guide/",
+      "description": "Step-by-step tutorial with examples",
+      "category": "Written Tutorials",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160862"
+    },
+    {
+      "name": "How to Use Skills in Claude Code",
+      "url": "https://skywork.ai/blog/how-to-use-skills-in-claude-code-install-path-project-scoping-testing/",
+      "description": "Installation, project scoping, and testing guide",
+      "category": "Written Tutorials",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160867"
+    },
+    {
+      "name": "Skills Explained",
+      "url": "https://claude.com/blog/skills-explained",
+      "description": "Official Anthropic blog post covering progressive disclosure, use cases, and when to use Skills vs other tools",
+      "category": "📰 Articles & Blog Posts",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160885"
+    },
+    {
+      "name": "Simon Willison: Claude Skills are awesome, maybe a bigger deal than MCP",
+      "url": "https://simonwillison.net/2025/Oct/16/claude-skills/",
+      "description": "Technical deep dive and analysis",
+      "category": "📰 Articles & Blog Posts",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160890"
+    },
+    {
+      "name": "Official Skills Repository Issues",
+      "url": "https://github.com/anthropics/skills/issues",
+      "description": "",
+      "category": "Getting Help",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160968"
+    },
+    {
+      "name": "Community Discussions",
+      "url": "https://github.com/anthropics/skills/discussions",
+      "description": "",
+      "category": "Getting Help",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-19T08:57:50.160976"
+    },
+    {
+      "name": "superpowers-skills",
+      "url": "https://github.com/obra/superpowers-skills",
+      "description": "Community-editable skills repository",
+      "category": "Collections & Libraries",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-24T23:33:49.837586"
+    },
+    {
+      "name": "Blog: Superpowers",
+      "url": "https://blog.fsck.com/2025/10/09/superpowers/",
+      "description": "Author's overview by Jesse Vincent",
+      "category": "Collections & Libraries",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-24T23:33:49.837594"
+    },
+    {
+      "name": "Blog post about its development",
+      "url": "https://blog.fsck.com/2025/10/23/naming-claude-plugins/",
+      "description": "",
+      "category": "Collections & Libraries",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-24T23:33:49.837615"
+    },
+    {
+      "name": "Issue #268",
+      "url": "https://github.com/anthropics/claude-agent-sdk-python/issues/268",
+      "description": "",
+      "category": "Known Issues",
+      "source": "github-awesome",
+      "fetched_at": "2026-01-24T23:33:49.838257"
+    }
+  ],
+  "last_updated": "2026-01-27T12:04:08.444201"
+}

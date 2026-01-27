@@ -69,6 +69,47 @@ def fetch_url(url: str, headers: dict = None) -> str:
         return None
 
 
+def _is_valid_skill_url(url: str) -> bool:
+    """Validate if URL points to a valid Claude Code Skill repository."""
+    # 必须是 GitHub 链接
+    if 'github.com' not in url:
+        return False
+
+    # 排除非 skill 路径
+    invalid_patterns = [
+        '/issues', '/discussions', '/pulls', '/wiki', '/releases',
+        '/actions', '/projects', '/security', '/pulse', '/graphs',
+        'support.', 'docs.', 'blog.', '.ai/blog', '.com/blog'
+    ]
+
+    for pattern in invalid_patterns:
+        if pattern in url.lower():
+            return False
+
+    # GitHub skill 通常包含这些路径之一
+    valid_patterns = [
+        '/tree/main/skills/',
+        '/tree/master/skills/',
+        '/blob/main/SKILL.md',
+        '/blob/master/SKILL.md',
+        'anthropics/skills',  # Anthropic 官方 skills 仓库
+    ]
+
+    # 检查是否匹配有效模式
+    for pattern in valid_patterns:
+        if pattern in url:
+            return True
+
+    # 如果是指向仓库根目录，检查是否可能是单个 skill 仓库
+    # 格式: github.com/user/repo (没有 /tree/ 等子路径)
+    repo_root_pattern = r'^https?://github\.com/[^/]+/[^/]+/?$'
+    if re.match(repo_root_pattern, url):
+        # 可能是单个 skill 的仓库，暂时接受
+        return True
+
+    return False
+
+
 def parse_awesome_list(content: str) -> list:
     """Parse the awesome-claude-skills README.md to extract skills."""
     skills = []
@@ -78,6 +119,32 @@ def parse_awesome_list(content: str) -> list:
     skip_patterns = ['badge', 'shield', 'twitter', 'linkedin', 'discord',
                      'buymeacoffee', 'ko-fi', 'sponsor', 'paypal', 'patreon']
 
+    # 只保留真正的 Skill 分类（白名单）
+    valid_categories = [
+        'Document Skills', 'Design & Creative', 'Development', 'Testing',
+        'Communication', 'Productivity', 'Data Analysis', 'DevOps',
+        'Security', 'AI & ML', 'Database', 'Web Development',
+        'Mobile Development', 'Game Development', 'Blockchain',
+        'Official Skills', 'Community Skills', 'Enterprise Skills',
+        # 包含这些关键词的分类也接受
+        'Skills'
+    ]
+
+    # 排除非 Skill 分类（黑名单）
+    skip_categories = [
+        'Written Tutorials', 'Video Tutorials', 'Documentation',
+        'Articles & Blog Posts', 'Getting Help', 'Community',
+        'Resources', 'Learning Resources', 'Guides', 'Templates',
+        'Getting Started', 'Skill Creation', 'Creating Your First Skill',
+        'Recent Updates', 'Troubleshooting', 'FAQ', 'Contributing',
+        'Security & Best Practices', 'Known Issues'
+    ]
+
+    # 排除关键词（用于链接和描述）
+    skip_keywords = ['tutorial', 'guide', 'documentation', 'article', 'blog',
+                     'support.claude.com', 'docs.anthropic.com', '/issues',
+                     '/discussions', 'how to', 'how-to', 'learn', 'course']
+
     lines = content.split('\n')
     for line in lines:
         # 匹配标题（## 或 ###）来确定分类
@@ -86,6 +153,11 @@ def parse_awesome_list(content: str) -> list:
             current_category = header_match.group(1).strip()
             # 移除 emoji 前缀
             current_category = re.sub(r'^[\U0001F300-\U0001F9FF\s]+', '', current_category).strip()
+            continue
+
+        # 检查当前分类是否有效
+        # 跳过黑名单分类
+        if any(skip_cat.lower() in current_category.lower() for skip_cat in skip_categories):
             continue
 
         # 支持多种列表格式：-, *, •, 数字列表
@@ -115,6 +187,15 @@ def parse_awesome_list(content: str) -> list:
 
                 # 跳过锚点链接（目录）
                 if url.startswith('#'):
+                    break
+
+                # 跳过非 GitHub skill 链接
+                if not _is_valid_skill_url(url):
+                    break
+
+                # 跳过包含黑名单关键词的内容
+                combined_text = (name + ' ' + url + ' ' + description).lower()
+                if any(keyword in combined_text for keyword in skip_keywords):
                     break
 
                 # 清理描述中的尾随标点和空白
