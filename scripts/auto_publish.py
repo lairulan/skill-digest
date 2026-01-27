@@ -23,12 +23,26 @@ WECHAT_APPID = "wx5c5f1c55d02d1354"  # 三更AI
 WECHAT_API_BASE = "https://wx.limyai.com/api/openapi"
 
 
+def get_image_base64(image_path: str) -> str:
+    """Convert image to base64 data URL."""
+    try:
+        import base64
+        with open(image_path, "rb") as f:
+            image_data = base64.b64encode(f.read()).decode("utf-8")
+
+        # Return as data URL
+        return f"data:image/png;base64,{image_data}"
+    except Exception as e:
+        log(f"Error converting image to base64: {e}")
+        return None
+
+
 def upload_to_imgbb(image_path: str) -> str:
     """Upload image to imgbb and return URL."""
     imgbb_api_key = os.environ.get("IMGBB_API_KEY", "")
     if not imgbb_api_key:
-        log("IMGBB_API_KEY not set, skipping image upload")
-        return None
+        log("IMGBB_API_KEY not set, using base64 data URL instead")
+        return get_image_base64(image_path)
 
     try:
         import base64
@@ -49,11 +63,11 @@ def upload_to_imgbb(image_path: str) -> str:
             log(f"Image uploaded to imgbb: {url}")
             return url
         else:
-            log(f"imgbb upload failed: {response}")
-            return None
+            log(f"imgbb upload failed, using base64 fallback")
+            return get_image_base64(image_path)
     except Exception as e:
-        log(f"Image upload error: {e}")
-        return None
+        log(f"Image upload error, using base64 fallback: {e}")
+        return get_image_base64(image_path)
 
 
 def publish_to_wechat(title: str, content: str, author: str = "三更AI", cover_image: str = None) -> dict:
@@ -134,16 +148,19 @@ def main():
 
     log(f"Article generated: {len(article)} characters")
 
-    # Upload cover image to imgbb if available
+    # Upload cover image to imgbb or use base64
     cover_url = None
     if cover_path:
         log(f"Cover image generated: {cover_path}")
-        log("Uploading cover image to imgbb...")
+        log("Processing cover image...")
         cover_url = upload_to_imgbb(cover_path)
         if cover_url:
-            log(f"Cover image uploaded: {cover_url}")
+            if cover_url.startswith("data:"):
+                log("Using base64 data URL for cover image")
+            else:
+                log(f"Cover image uploaded: {cover_url}")
         else:
-            log("Warning: Failed to upload cover image, publishing without cover")
+            log("Warning: Failed to process cover image, publishing without cover")
 
     # Step 3: Publish to WeChat
     log("Step 3: Publishing to WeChat...")
