@@ -89,7 +89,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/canvas-design",
       "category": "Design & Creative",
       "date": "2026-01-27T12:00:39.921494"
+    },
+    {
+      "name": "artifacts-builder",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/artifacts-builder",
+      "category": "Development",
+      "date": "2026-01-28T04:01:02.280029"
     }
   ],
-  "last_updated": "2026-01-27T12:00:39.921502"
+  "last_updated": "2026-01-28T04:01:02.280033"
 }
