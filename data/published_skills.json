@@ -101,7 +101,13 @@
       "url": "https://github.com/anthropics/skills/blob/main/skills/frontend-design",
       "category": "Development",
       "date": "2026-01-28T13:14:32.090070"
+    },
+    {
+      "name": "pdf",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/pdf",
+      "category": "Document Skills",
+      "date": "2026-01-29T04:01:45.464647"
     }
   ],
-  "last_updated": "2026-01-28T13:14:32.090074"
+  "last_updated": "2026-01-29T04:01:45.464651"
 }
