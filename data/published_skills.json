@@ -107,7 +107,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/pdf",
       "category": "Document Skills",
       "date": "2026-01-29T04:01:45.464647"
+    },
+    {
+      "name": "obra/superpowers-lab",
+      "url": "https://github.com/obra/superpowers-lab",
+      "category": "Collections & Libraries",
+      "date": "2026-01-30T04:01:44.773102"
     }
   ],
-  "last_updated": "2026-01-29T04:01:45.464651"
+  "last_updated": "2026-01-30T04:01:44.773106"
 }
