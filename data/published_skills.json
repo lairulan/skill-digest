@@ -5,7 +5,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/pptx",
       "category": "Document Skills",
       "date": "2026-01-31T11:02:13.315789"
+    },
+    {
+      "name": "artifacts-builder",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/artifacts-builder",
+      "category": "Development",
+      "date": "2026-01-31T11:11:22.868640"
     }
   ],
-  "last_updated": "2026-01-31T11:02:13.315793"
+  "last_updated": "2026-01-31T11:11:22.868644"
 }
