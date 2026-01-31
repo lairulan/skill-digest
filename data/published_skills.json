@@ -11,7 +11,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/artifacts-builder",
       "category": "Development",
       "date": "2026-01-31T11:11:22.868640"
+    },
+    {
+      "name": "slack-gif-creator",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/slack-gif-creator",
+      "category": "Design & Creative",
+      "date": "2026-01-31T11:13:49.188783"
     }
   ],
-  "last_updated": "2026-01-31T11:11:22.868644"
+  "last_updated": "2026-01-31T11:13:49.188786"
 }
