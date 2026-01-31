@@ -117,23 +117,54 @@ def call_openrouter_api(prompt: str, system_prompt: str = None, model: str = Non
         return None
 
 
-def generate_cover_image(skill_name: str, skill_description: str) -> str:
-    """Generate a cover image using OpenRouter or Doubao as fallback."""
+def generate_cover_image(skill_name: str, skill_description: str, article_content: str = None) -> str:
+    """Generate a cover image using OpenRouter or Doubao as fallback.
+
+    Args:
+        skill_name: 技能名称
+        skill_description: 技能描述
+        article_content: 文章内容，用于提取关键主题生成更相关的封面图
+    """
+    # 从文章内容中提取关键词来增强图片生成
+    theme_keywords = []
+    if article_content:
+        # 提取核心能力和使用场景中的关键词
+        import re
+        # 查找核心能力部分
+        ability_match = re.search(r'核心能力[：:\s]*\n([\s\S]*?)(?=\n##|\n\*\*使用|$)', article_content)
+        if ability_match:
+            abilities = ability_match.group(1)
+            # 提取关键动词和名词
+            keywords = re.findall(r'[-•*]\s*\*?\*?([^*\n:：]+)', abilities)
+            theme_keywords.extend([k.strip()[:20] for k in keywords[:3] if k.strip()])
+
+        # 查找使用场景
+        scene_match = re.search(r'使用场景[：:\s]*\n([\s\S]*?)(?=\n##|$)', article_content)
+        if scene_match:
+            scenes = scene_match.group(1)
+            scene_keywords = re.findall(r'场景[一二三四五\d][：:]\s*([^\n]+)', scenes)
+            theme_keywords.extend([k.strip()[:20] for k in scene_keywords[:2] if k.strip()])
+
+    # 构建更具体的图片描述
+    theme_desc = ""
+    if theme_keywords:
+        theme_desc = f"\nKey themes to visualize: {', '.join(theme_keywords[:4])}"
+
     # 构建图片生成提示词
     image_prompt = f"""Generate a professional cover image for "每日Skill精选" - a daily Claude Code Skill recommendation.
 
 Theme: Claude Code Skill "{skill_name}"
-Description: {skill_description[:100] if skill_description else 'AI coding assistant skill'}
+Description: {skill_description[:150] if skill_description else 'AI coding assistant skill'}{theme_desc}
 
 Design requirements:
-- Modern, clean tech illustration style
+- Modern, clean tech illustration style with SPECIFIC visual elements related to the skill's function
 - Purple and blue gradient as main colors (Claude's brand colors)
-- Include abstract elements representing: AI assistant, coding, automation, productivity
-- Geometric patterns, code symbols, or circuit-like designs
+- Include CONCRETE visual metaphors representing the skill's core capability (not just generic tech icons)
+- If the skill is about documents, show document/file visuals; if about automation, show workflow visuals; if about code, show code-related visuals
 - Professional and polished look suitable for WeChat Official Account
 - 16:9 aspect ratio
 - NO text, NO letters, NO words in the image
-- Style: flat design, modern UI, tech illustration"""
+- Style: flat design, modern UI, tech illustration with depth and detail"""
 
     # 尝试 OpenRouter
     if OPENROUTER_API_KEY:
@@ -521,33 +552,27 @@ Skill 信息：
 
 {"README内容：" + readme[:3000] if readme else ""}
 
-请按照以下结构撰写：
+请按照以下结构撰写（注意：不要写标题，标题会单独设置）：
 
-1. **标题**：每日Skill精选：[Skill名称] - [一句话亮点]
+1. **简介**（50-80字）：直接开始介绍这是一个什么样的 Claude Code Skill，能帮助用户解决什么问题。不要重复技能名称作为开头。
 
-2. **简介**（50-80字）：这是一个什么样的 Claude Code Skill，能帮助用户解决什么问题
+2. **核心能力**（200-300字）：列出3-5个主要功能点，详细说明这个 Skill 能做什么，每个功能点都要有具体描述
 
-3. **核心能力**：列出3-4个主要功能点，说明这个 Skill 能做什么
+3. **使用场景**（200-300字）：描述3-4个具体的使用场景，让读者明白什么时候需要用这个 Skill，举实际例子
 
-4. **使用场景**（150-200字）：描述2-3个具体的使用场景，让读者明白什么时候需要用这个 Skill
+4. **优缺点评估**：
+   - ✅ 优点：3-4点（基于实际功能，具体说明）
+   - ⚠️ 不足：1-2点（客观真实，不回避问题）
 
-5. **快速上手**（100-150字）：
-   - 如何安装这个 Skill（通常是克隆到 ~/.claude/skills/ 目录）
-   - 如何在 Claude Code 中使用
-
-6. **优缺点评估**：
-   - 优点：3-4点（基于实际功能）
-   - 不足：1-2点（客观真实）
-
-7. **推荐指数**：⭐评分（1-5星）和一句话总结
-
-8. **获取方式**：GitHub 链接
+5. **推荐指数**：⭐评分（1-5星）和一句话总结推荐理由
 
 写作要求：
 - 始终强调这是 Claude Code Skill，不是普通的软件工具
 - 保持客观专业，不过度吹捧
-- 使用中文撰写
-- 适当使用 Markdown 格式"""
+- 使用中文撰写，语言生动有趣
+- 适当使用 Markdown 格式和 emoji
+- 每个板块都要有实质内容，不要泛泛而谈
+- 不要添加安装方法、获取方式、引用链接等额外板块"""
 
     content = call_openrouter_api(user_prompt, system_prompt)
     if content:
@@ -585,11 +610,11 @@ def generate_article(skill: dict = None, generate_cover: bool = True) -> tuple:
         log("Using template-based generation")
         article = generate_article_template(skill)
 
-    # Generate cover image
+    # Generate cover image - 传入文章内容以生成更相关的封面图
     cover_path = None
     if generate_cover and OPENROUTER_API_KEY:
-        log("Generating cover image...")
-        cover_path = generate_cover_image(skill.get("name", "skill"), skill.get("description", ""))
+        log("Generating cover image based on article content...")
+        cover_path = generate_cover_image(skill.get("name", "skill"), skill.get("description", ""), article)
 
     return article, cover_path
 

@@ -41,33 +41,62 @@ def upload_to_imgbb(image_path: str) -> str:
     """Upload image to imgbb and return URL."""
     imgbb_api_key = os.environ.get("IMGBB_API_KEY", "")
     if not imgbb_api_key:
-        log("IMGBB_API_KEY not set, using base64 data URL instead")
-        return get_image_base64(image_path)
+        log("IMGBB_API_KEY not set, skipping image upload")
+        return None
 
     try:
         import base64
+
+        # 检查文件大小（imgbb限制32MB）
+        file_size = os.path.getsize(image_path)
+        if file_size > 32 * 1024 * 1024:
+            log(f"Image file too large ({file_size} bytes), skipping upload")
+            return None
+
+        # 读取图片并转换为base64
         with open(image_path, "rb") as f:
             image_data = base64.b64encode(f.read()).decode("utf-8")
+
+        # 使用正确的API格式：application/x-www-form-urlencoded
+        import urllib.parse
+        data = urllib.parse.urlencode({"image": image_data})
 
         cmd = [
             "curl", "-s", "-X", "POST",
             f"https://api.imgbb.com/1/upload?key={imgbb_api_key}",
-            "-F", f"image={image_data}"
+            "-H", "Content-Type: application/x-www-form-urlencoded",
+            "-d", data
         ]
 
+        log(f"Uploading image to imgbb (size: {file_size} bytes)...")
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+
+        if result.returncode != 0:
+            log(f"curl command failed with code {result.returncode}")
+            if result.stderr:
+                log(f"Error: {result.stderr[:200]}")
+            return None
+
         response = json.loads(result.stdout)
 
         if response.get("success"):
             url = response.get("data", {}).get("url", "")
-            log(f"Image uploaded to imgbb: {url}")
+            log(f"✅ Image uploaded to imgbb: {url}")
             return url
         else:
-            log(f"imgbb upload failed, using base64 fallback")
-            return get_image_base64(image_path)
+            error_msg = response.get("error", {}).get("message", "Unknown error")
+            log(f"❌ imgbb upload failed: {error_msg}")
+            return None
+    except subprocess.TimeoutExpired:
+        log("❌ imgbb upload timeout")
+        return None
+    except json.JSONDecodeError as e:
+        log(f"❌ imgbb response parse error: {e}")
+        log(f"Response: {result.stdout[:500]}")
+        return None
     except Exception as e:
-        log(f"Image upload error, using base64 fallback: {e}")
-        return get_image_base64(image_path)
+        log(f"❌ Image upload error: {type(e).__name__}: {e}")
+        return None
 
 
 def publish_to_wechat(title: str, content: str, author: str = "三更AI", cover_image: str = None) -> dict:
