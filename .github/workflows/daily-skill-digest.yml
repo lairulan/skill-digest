@@ -49,6 +49,7 @@ jobs:
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           SANGENG_API_KEY: ${{ secrets.SANGENG_API_KEY }}
+          IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
         run: |
           set -x
           cd scripts

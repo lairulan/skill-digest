@@ -100,18 +100,28 @@ def publish_to_wechat(title: str, content: str, author: str = "三更AI", cover_
     ]
 
     try:
+        log(f"Sending request to: {url}")
+        log(f"Request data: {json.dumps(data, ensure_ascii=False)[:500]}...")  # 只显示前500字符
+
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+
+        log(f"HTTP Status Code: {result.returncode}")
+        log(f"Response stdout: {result.stdout[:1000]}")  # 显示前1000字符
+        if result.stderr:
+            log(f"Response stderr: {result.stderr[:500]}")
+
         response = json.loads(result.stdout)
         log(f"WeChat publish result: {json.dumps(response, ensure_ascii=False)}")
         return response
     except subprocess.TimeoutExpired:
-        log("WeChat publish timeout")
+        log("❌ WeChat publish timeout (60s)")
         return {"success": False, "error": "Request timeout"}
-    except json.JSONDecodeError:
-        log(f"WeChat publish parse error: {result.stdout}")
+    except json.JSONDecodeError as e:
+        log(f"❌ WeChat publish JSON parse error: {e}")
+        log(f"Raw response: {result.stdout}")
         return {"success": False, "error": f"Parse error: {result.stdout}"}
     except Exception as e:
-        log(f"WeChat publish error: {e}")
+        log(f"❌ WeChat publish exception: {type(e).__name__}: {e}")
         return {"success": False, "error": str(e)}
 
 
@@ -171,16 +181,17 @@ def main():
     if result.get("success"):
         log("✅ Successfully published to WeChat!")
         log(f"Publication ID: {result.get('data', {}).get('publicationId', 'N/A')}")
+        log("=" * 50)
+        log("Skill Digest Auto Publish completed successfully")
+        log("=" * 50)
+        return 0
     else:
-        log(f"⚠️ WeChat publish failed: {result.get('error', 'Unknown error')}")
-        # Don't fail the workflow if only WeChat publish fails
-        # The article was still generated successfully
-
-    log("=" * 50)
-    log("Skill Digest Auto Publish completed")
-    log("=" * 50)
-
-    return 0
+        log(f"❌ WeChat publish FAILED: {result.get('error', 'Unknown error')}")
+        log(f"Full response: {json.dumps(result, ensure_ascii=False)}")
+        log("=" * 50)
+        log("Skill Digest Auto Publish FAILED - WeChat publish error")
+        log("=" * 50)
+        return 1
 
 
 if __name__ == "__main__":
