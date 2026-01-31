@@ -38,41 +38,32 @@ def get_image_base64(image_path: str) -> str:
 
 
 def upload_to_imgbb(image_path: str) -> str:
-    """Upload image to imgbb and return URL."""
+    """Upload image to imgbb and return URL using multipart form-data."""
     imgbb_api_key = os.environ.get("IMGBB_API_KEY", "")
     if not imgbb_api_key:
         log("IMGBB_API_KEY not set, skipping image upload")
         return None
 
     try:
-        import base64
-
         # 检查文件大小（imgbb限制32MB）
         file_size = os.path.getsize(image_path)
         if file_size > 32 * 1024 * 1024:
             log(f"Image file too large ({file_size} bytes), skipping upload")
             return None
 
-        # 读取图片并转换为base64
-        with open(image_path, "rb") as f:
-            image_data = base64.b64encode(f.read()).decode("utf-8")
+        log(f"Uploading image to imgbb (size: {file_size} bytes)...")
 
-        # 使用正确的API格式：application/x-www-form-urlencoded
-        import urllib.parse
-        data = urllib.parse.urlencode({"image": image_data})
-
+        # 使用curl的multipart form-data上传，使用@file语法避免命令行参数过长
         cmd = [
             "curl", "-s", "-X", "POST",
             f"https://api.imgbb.com/1/upload?key={imgbb_api_key}",
-            "-H", "Content-Type: application/x-www-form-urlencoded",
-            "-d", data
+            "-F", f"image=@{image_path}"
         ]
 
-        log(f"Uploading image to imgbb (size: {file_size} bytes)...")
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
 
         if result.returncode != 0:
-            log(f"curl command failed with code {result.returncode}")
+            log(f"❌ curl command failed with code {result.returncode}")
             if result.stderr:
                 log(f"Error: {result.stderr[:200]}")
             return None
