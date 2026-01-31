@@ -158,19 +158,24 @@ def main():
 
     log(f"Article generated: {len(article)} characters")
 
-    # Upload cover image to imgbb or use base64
+    # Upload cover image to imgbb (不使用base64 fallback，因为太大会导致curl失败)
     cover_url = None
     if cover_path:
         log(f"Cover image generated: {cover_path}")
-        log("Processing cover image...")
+        log("Uploading cover image to imgbb...")
         cover_url = upload_to_imgbb(cover_path)
         if cover_url:
             if cover_url.startswith("data:"):
-                log("Using base64 data URL for cover image")
+                # Base64图片太大，不使用
+                log("⚠️ Base64 image too large, skipping cover image")
+                cover_url = None
+            elif cover_url.startswith("http"):
+                log(f"✅ Cover image uploaded: {cover_url}")
             else:
-                log(f"Cover image uploaded: {cover_url}")
+                log(f"⚠️ Invalid cover URL: {cover_url}, skipping")
+                cover_url = None
         else:
-            log("Warning: Failed to process cover image, publishing without cover")
+            log("⚠️ Failed to upload cover image, publishing without cover")
 
     # Step 3: Publish to WeChat
     log("Step 3: Publishing to WeChat...")
