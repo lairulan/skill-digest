@@ -1,4 +1,11 @@
 {
-  "published": [],
-  "last_updated": "2026-01-31T11:00:00.000000"
+  "published": [
+    {
+      "name": "pptx",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/pptx",
+      "category": "Document Skills",
+      "date": "2026-01-31T11:02:13.315789"
+    }
+  ],
+  "last_updated": "2026-01-31T11:02:13.315793"
 }
