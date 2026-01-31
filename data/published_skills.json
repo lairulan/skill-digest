@@ -17,7 +17,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/slack-gif-creator",
       "category": "Design & Creative",
       "date": "2026-01-31T11:13:49.188783"
+    },
+    {
+      "name": "internal-comms",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/internal-comms",
+      "category": "Communication",
+      "date": "2026-01-31T11:25:20.993395"
     }
   ],
-  "last_updated": "2026-01-31T11:13:49.188786"
+  "last_updated": "2026-01-31T11:25:20.993399"
 }
