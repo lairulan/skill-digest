@@ -5,7 +5,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/docx",
       "category": "Document Skills",
       "date": "2026-02-01T04:01:23.145622"
+    },
+    {
+      "name": "canvas-design",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/canvas-design",
+      "category": "Design & Creative",
+      "date": "2026-02-02T04:01:20.610647"
     }
   ],
-  "last_updated": "2026-02-01T04:01:23.145626"
+  "last_updated": "2026-02-02T04:01:20.610651"
 }
