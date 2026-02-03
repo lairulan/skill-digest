@@ -11,7 +11,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/canvas-design",
       "category": "Design & Creative",
       "date": "2026-02-02T04:01:20.610647"
+    },
+    {
+      "name": "webapp-testing",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/webapp-testing",
+      "category": "Development",
+      "date": "2026-02-03T04:01:12.390493"
     }
   ],
-  "last_updated": "2026-02-02T04:01:20.610651"
+  "last_updated": "2026-02-03T04:01:12.390497"
 }
