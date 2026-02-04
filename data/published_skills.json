@@ -17,7 +17,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/webapp-testing",
       "category": "Development",
       "date": "2026-02-03T04:01:12.390493"
+    },
+    {
+      "name": "internal-comms",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/internal-comms",
+      "category": "Communication",
+      "date": "2026-02-04T04:01:09.733615"
     }
   ],
-  "last_updated": "2026-02-03T04:01:12.390497"
+  "last_updated": "2026-02-04T04:01:09.733619"
 }
