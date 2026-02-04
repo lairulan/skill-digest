@@ -19,7 +19,7 @@ from generate_article import generate_article, call_openrouter_api, OPENROUTER_A
 
 # WeChat publish configuration (微绿流量宝 API)
 WECHAT_API_KEY = os.environ.get("WECHAT_API_KEY") or os.environ.get("SANGENG_API_KEY", "")
-WECHAT_APPID = "wx5c5f1c55d02d1354"  # 三更AI
+WECHAT_APPID = "wx287cdb9d78a498aa"  # 三更熟（已授权）
 WECHAT_API_BASE = "https://wx.limyai.com/api/openapi"
 
 
