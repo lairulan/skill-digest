@@ -4,26 +4,20 @@
       "name": "docx",
       "url": "https://github.com/anthropics/skills/tree/main/skills/docx",
       "category": "Document Skills",
-      "date": "2026-02-01T04:01:23.145622"
+      "date": "2026-02-02T12:00:59.681708"
     },
     {
-      "name": "canvas-design",
-      "url": "https://github.com/anthropics/skills/tree/main/skills/canvas-design",
-      "category": "Design & Creative",
-      "date": "2026-02-02T04:01:20.610647"
-    },
-    {
-      "name": "webapp-testing",
-      "url": "https://github.com/anthropics/skills/tree/main/skills/webapp-testing",
+      "name": "frontend-design",
+      "url": "https://github.com/anthropics/skills/blob/main/skills/frontend-design",
       "category": "Development",
-      "date": "2026-02-03T04:01:12.390493"
+      "date": "2026-02-03T12:00:53.555496"
     },
     {
       "name": "internal-comms",
       "url": "https://github.com/anthropics/skills/tree/main/skills/internal-comms",
       "category": "Communication",
-      "date": "2026-02-04T04:01:09.733615"
+      "date": "2026-02-04T12:00:38.637275"
     }
   ],
-  "last_updated": "2026-02-04T04:01:09.733619"
+  "last_updated": "2026-02-04T12:00:38.637277"
 }

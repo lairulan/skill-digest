@@ -552,30 +552,60 @@ Skill 信息：
 
 {"README内容：" + readme[:3000] if readme else ""}
 
-请按照以下结构撰写（注意：不要写标题，标题会单独设置）：
+请严格按照以下HTML格式输出（只输出HTML，不要其他内容）：
 
-1. **简介**（50-80字）：直接开始介绍这是一个什么样的 Claude Code Skill，能帮助用户解决什么问题。不要重复技能名称作为开头。
+<section style="padding: 20px; font-family: -apple-system, 'PingFang SC', sans-serif; line-height: 1.8; color: #333;">
 
-2. **核心能力**（200-300字）：列出3-5个主要功能点，详细说明这个 Skill 能做什么，每个功能点都要有具体描述
+<p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.9; color: #555;">[50-80字简介]</p>
 
-3. **使用场景**（200-300字）：描述3-4个具体的使用场景，让读者明白什么时候需要用这个 Skill，举实际例子
+<h2 style="font-size: 18px; font-weight: bold; color: #2c3e50; margin: 25px 0 15px 0; padding-bottom: 8px; border-bottom: 2px solid #3498db;">📱 核心能力</h2>
 
-4. **优缺点评估**：
-   **✅ 优点**
-   - [列出3-4个优点，每点一行，基于实际功能具体说明]
+<div style="background: #f0f7ff; padding: 15px; border-left: 4px solid #3498db; margin-bottom: 15px; border-radius: 4px;">
+<p style="margin: 0 0 8px 0; font-size: 15px;"><strong style="color: #3498db;">⚙️ 能力1</strong></p>
+<p style="margin: 0; font-size: 14px; color: #555;">描述...</p>
+</div>
 
-   **⚠️ 不足**
-   - [列出1-2个不足，每点一行，客观真实不回避问题]
+<div style="background: #f0fff4; padding: 15px; border-left: 4px solid #52c41a; margin-bottom: 15px; border-radius: 4px;">
+<p style="margin: 0 0 8px 0; font-size: 15px;"><strong style="color: #52c41a;">🔧 能力2</strong></p>
+<p style="margin: 0; font-size: 14px; color: #555;">描述...</p>
+</div>
 
-5. **推荐指数**：⭐评分（1-5星）和一句话总结推荐理由
+<div style="background: #f9f0ff; padding: 15px; border-left: 4px solid #722ed1; margin-bottom: 15px; border-radius: 4px;">
+<p style="margin: 0 0 8px 0; font-size: 15px;"><strong style="color: #722ed1;">🚀 能力3</strong></p>
+<p style="margin: 0; font-size: 14px; color: #555;">描述...</p>
+</div>
+
+<h2 style="font-size: 18px; font-weight: bold; color: #2c3e50; margin: 25px 0 15px 0; padding-bottom: 8px; border-bottom: 2px solid #52c41a;">💡 使用场景</h2>
+
+<p style="margin: 0 0 15px 0; font-size: 15px; line-height: 1.9; color: #333;"><strong style="color: #52c41a;">▪️ 场景一：</strong>[名称]<br/><span style="color: #666; font-size: 14px;">[描述]</span></p>
+
+<p style="margin: 0 0 15px 0; font-size: 15px; line-height: 1.9; color: #333;"><strong style="color: #52c41a;">▪️ 场景二：</strong>[名称]<br/><span style="color: #666; font-size: 14px;">[描述]</span></p>
+
+<p style="margin: 0 0 15px 0; font-size: 15px; line-height: 1.9; color: #333;"><strong style="color: #52c41a;">▪️ 场景三：</strong>[名称]<br/><span style="color: #666; font-size: 14px;">[描述]</span></p>
+
+<h2 style="font-size: 18px; font-weight: bold; color: #2c3e50; margin: 25px 0 15px 0; padding-bottom: 8px; border-bottom: 2px solid #f39c12;">📊 优缺点评估</h2>
+
+<p style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold; color: #52c41a;">✅ 优点</p>
+<p style="margin: 0 0 8px 0; padding-left: 20px; font-size: 14px; color: #555;">▪️ [优点1]</p>
+<p style="margin: 0 0 8px 0; padding-left: 20px; font-size: 14px; color: #555;">▪️ [优点2]</p>
+<p style="margin: 0 0 8px 0; padding-left: 20px; font-size: 14px; color: #555;">▪️ [优点3]</p>
+
+<p style="margin: 15px 0 10px 0; font-size: 16px; font-weight: bold; color: #f39c12;">⚠️ 不足</p>
+<p style="margin: 0 0 8px 0; padding-left: 20px; font-size: 14px; color: #555;">▪️ [不足1]</p>
+
+<h2 style="font-size: 18px; font-weight: bold; color: #2c3e50; margin: 25px 0 15px 0; padding-bottom: 8px; border-bottom: 2px solid #722ed1;">⭐ 推荐指数</h2>
+
+<div style="background: #fff7e6; padding: 15px; border-left: 4px solid #fa8c16; border-radius: 4px;">
+<p style="margin: 0; font-size: 15px; color: #333;"><strong style="color: #fa8c16; font-size: 16px;">[⭐⭐⭐⭐]</strong><br/><span style="margin-top: 8px; display: block; color: #555;">[推荐理由]</span></p>
+</div>
+
+</section>
 
 写作要求：
-- 始终强调这是 Claude Code Skill，不是普通的软件工具
-- 保持客观专业，不过度吹捧
-- 使用中文撰写，语言生动有趣
-- 适当使用 Markdown 格式和 emoji
-- 每个板块都要有实质内容，不要泛泛而谈
-- 不要添加安装方法、获取方式、引用链接等额外板块"""
+- 只输出HTML，不要```html```标记
+- 每个能力项用不同emoji和颜色
+- 内容要有实质，避免空洞
+- 不添加额外板块"""
 
     content = call_openrouter_api(user_prompt, system_prompt)
     if content:

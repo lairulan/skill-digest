@@ -102,7 +102,7 @@ def publish_to_wechat(title: str, content: str, author: str = "三更AI", cover_
         "wechatAppid": WECHAT_APPID,
         "title": title,
         "content": content,
-        "contentFormat": "markdown",
+        "contentFormat": "html",
         "author": author
     }
 
