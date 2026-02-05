@@ -23,7 +23,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/slack-gif-creator",
       "category": "Design & Creative",
       "date": "2026-02-04T15:45:24.087501"
+    },
+    {
+      "name": "webapp-testing",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/webapp-testing",
+      "category": "Development",
+      "date": "2026-02-05T04:02:15.225194"
     }
   ],
-  "last_updated": "2026-02-04T15:45:24.087505"
+  "last_updated": "2026-02-05T04:02:15.225199"
 }
