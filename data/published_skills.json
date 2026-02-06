@@ -29,7 +29,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/webapp-testing",
       "category": "Development",
       "date": "2026-02-05T04:02:15.225194"
+    },
+    {
+      "name": "pdf",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/pdf",
+      "category": "Document Skills",
+      "date": "2026-02-06T04:02:29.117232"
     }
   ],
-  "last_updated": "2026-02-05T04:02:15.225199"
+  "last_updated": "2026-02-06T04:02:29.117235"
 }
