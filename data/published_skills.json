@@ -35,7 +35,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/pdf",
       "category": "Document Skills",
       "date": "2026-02-06T04:02:29.117232"
+    },
+    {
+      "name": "canvas-design",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/canvas-design",
+      "category": "Design & Creative",
+      "date": "2026-02-07T04:02:09.987154"
     }
   ],
-  "last_updated": "2026-02-06T04:02:29.117235"
+  "last_updated": "2026-02-07T04:02:09.987157"
 }
