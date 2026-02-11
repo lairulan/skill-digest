@@ -22,50 +22,50 @@
       "name": "slack-gif-creator",
       "url": "https://github.com/anthropics/skills/tree/main/skills/slack-gif-creator",
       "category": "Design & Creative",
-      "date": "2026-02-04T15:45:24.087501"
+      "date": "2026-02-04T23:26:19.991072"
     },
     {
       "name": "webapp-testing",
       "url": "https://github.com/anthropics/skills/tree/main/skills/webapp-testing",
       "category": "Development",
-      "date": "2026-02-05T04:02:15.225194"
-    },
-    {
-      "name": "pdf",
-      "url": "https://github.com/anthropics/skills/tree/main/skills/pdf",
-      "category": "Document Skills",
-      "date": "2026-02-06T04:02:29.117232"
-    },
-    {
-      "name": "canvas-design",
-      "url": "https://github.com/anthropics/skills/tree/main/skills/canvas-design",
-      "category": "Design & Creative",
-      "date": "2026-02-07T04:02:09.987154"
-    },
-    {
-      "name": "web-artifacts-builder",
-      "url": "https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder",
-      "category": "Development",
-      "date": "2026-02-08T04:02:09.643232"
-    },
-    {
-      "name": "anthropics/skills",
-      "url": "https://github.com/anthropics/skills",
-      "category": "Repositories & Examples",
-      "date": "2026-02-09T04:02:54.397770"
+      "date": "2026-02-05T12:18:58.397515"
     },
     {
       "name": "pptx",
       "url": "https://github.com/anthropics/skills/tree/main/skills/pptx",
       "category": "Document Skills",
-      "date": "2026-02-10T04:01:50.302831"
+      "date": "2026-02-06T12:01:16.474080"
+    },
+    {
+      "name": "canvas-design",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/canvas-design",
+      "category": "Design & Creative",
+      "date": "2026-02-07T13:03:40.426246"
+    },
+    {
+      "name": "anthropics/skills",
+      "url": "https://github.com/anthropics/skills",
+      "category": "Repositories & Examples",
+      "date": "2026-02-08T13:06:27.422677"
+    },
+    {
+      "name": "pdf",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/pdf",
+      "category": "Document Skills",
+      "date": "2026-02-09T12:21:37.201673"
+    },
+    {
+      "name": "artifacts-builder",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/artifacts-builder",
+      "category": "Development",
+      "date": "2026-02-10T12:10:03.513797"
     },
     {
       "name": "xlsx",
       "url": "https://github.com/anthropics/skills/tree/main/skills/xlsx",
       "category": "Document Skills",
-      "date": "2026-02-11T04:02:15.619718"
+      "date": "2026-02-11T13:04:28.121643"
     }
   ],
-  "last_updated": "2026-02-11T04:02:15.619722"
+  "last_updated": "2026-02-11T13:04:28.121645"
 }

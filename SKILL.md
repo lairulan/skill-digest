@@ -1,6 +1,9 @@
 ---
 name: skill-digest
+version: 1.2.1
 description: 每日 Claude Skill 精选推送。自动从 Claude Skill 聚合网站精选技能，生成评测推荐文章，发布到微信公众号。
+author: rulanlai
+tags: [skill, digest, wechat, automation]
 triggers:
   - skill digest
   - 技能精选
