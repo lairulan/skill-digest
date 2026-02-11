@@ -59,7 +59,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/pptx",
       "category": "Document Skills",
       "date": "2026-02-10T04:01:50.302831"
+    },
+    {
+      "name": "xlsx",
+      "url": "https://github.com/anthropics/skills/tree/main/skills/xlsx",
+      "category": "Document Skills",
+      "date": "2026-02-11T04:02:15.619718"
     }
   ],
-  "last_updated": "2026-02-10T04:01:50.302835"
+  "last_updated": "2026-02-11T04:02:15.619722"
 }
