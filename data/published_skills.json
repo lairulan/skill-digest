@@ -71,7 +71,13 @@
       "url": "https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder",
       "category": "Development",
       "date": "2026-02-12T04:02:15.819330"
+    },
+    {
+      "name": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "category": "Collections & Libraries",
+      "date": "2026-02-13T04:01:58.754940"
     }
   ],
-  "last_updated": "2026-02-12T04:02:15.819334"
+  "last_updated": "2026-02-13T04:01:58.754944"
 }
